@@ -1,0 +1,122 @@
+
+gemcollector.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Girl_animation0001
+  rotate: false
+  xy: 1, 500
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0002
+  rotate: false
+  xy: 1, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0003
+  rotate: false
+  xy: 1, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0004
+  rotate: false
+  xy: 303, 500
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0005
+  rotate: false
+  xy: 303, 500
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0006
+  rotate: false
+  xy: 303, 500
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0007
+  rotate: false
+  xy: 303, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0008
+  rotate: false
+  xy: 605, 500
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0009
+  rotate: false
+  xy: 605, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+
+gemcollector2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Girl_animation0010
+  rotate: false
+  xy: 1, 500
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0011
+  rotate: false
+  xy: 1, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0012
+  rotate: false
+  xy: 303, 500
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0013
+  rotate: false
+  xy: 303, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0014
+  rotate: false
+  xy: 303, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0015
+  rotate: false
+  xy: 303, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1
+Girl_animation0016
+  rotate: false
+  xy: 303, 1
+  size: 300, 497
+  orig: 300, 497
+  offset: 0, 0
+  index: -1

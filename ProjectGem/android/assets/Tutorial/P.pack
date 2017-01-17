@@ -1,0 +1,89 @@
+
+P.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+P-Parrot0001
+  rotate: false
+  xy: 1, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0002
+  rotate: false
+  xy: 1, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0004
+  rotate: false
+  xy: 1, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0003
+  rotate: false
+  xy: 1, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0006
+  rotate: false
+  xy: 95, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0007
+  rotate: false
+  xy: 95, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0005
+  rotate: false
+  xy: 95, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0008
+  rotate: false
+  xy: 95, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0009
+  rotate: false
+  xy: 189, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0012
+  rotate: false
+  xy: 189, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0010
+  rotate: false
+  xy: 189, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1
+P-Parrot0011
+  rotate: false
+  xy: 189, 1
+  size: 92, 100
+  orig: 92, 100
+  offset: 0, 0
+  index: -1

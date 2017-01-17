@@ -1,0 +1,68 @@
+
+D.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+D-Dog0009
+  rotate: false
+  xy: 1, 163
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1
+D-Dog0007
+  rotate: false
+  xy: 1, 163
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1
+D-Dog0008
+  rotate: false
+  xy: 1, 163
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1
+D-Dog0005
+  rotate: false
+  xy: 1, 82
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1
+D-Dog0004
+  rotate: false
+  xy: 1, 82
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1
+D-Dog0006
+  rotate: false
+  xy: 1, 82
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1
+D-Dog0003
+  rotate: false
+  xy: 1, 1
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1
+D-Dog0001
+  rotate: false
+  xy: 1, 1
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1
+D-Dog0002
+  rotate: false
+  xy: 1, 1
+  size: 100, 79
+  orig: 100, 79
+  offset: 0, 0
+  index: -1

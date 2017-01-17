@@ -1,0 +1,47 @@
+
+Swahili_100_A.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+A-Hand0002
+  rotate: false
+  xy: 1, 1
+  size: 100, 117
+  orig: 100, 117
+  offset: 0, 0
+  index: -1
+A-Hand0001
+  rotate: false
+  xy: 1, 1
+  size: 100, 117
+  orig: 100, 117
+  offset: 0, 0
+  index: -1
+A-Hand0005
+  rotate: false
+  xy: 103, 1
+  size: 100, 117
+  orig: 100, 117
+  offset: 0, 0
+  index: -1
+A-Hand0006
+  rotate: false
+  xy: 103, 1
+  size: 100, 117
+  orig: 100, 117
+  offset: 0, 0
+  index: -1
+A-Hand0003
+  rotate: false
+  xy: 205, 1
+  size: 100, 117
+  orig: 100, 117
+  offset: 0, 0
+  index: -1
+A-Hand0004
+  rotate: false
+  xy: 205, 1
+  size: 100, 117
+  orig: 100, 117
+  offset: 0, 0
+  index: -1
