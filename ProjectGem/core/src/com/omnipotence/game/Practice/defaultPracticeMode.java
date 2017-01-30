@@ -41,7 +41,7 @@ public class defaultPracticeMode extends MyGdxGame {
             textures[textures.length-1] = new Texture("Circles/"+numOnes+"CIRCLE.png");
         }
         viewDialog(getTexRegionDrawable(Main.language+"/"+locat + "/" + character + ".png"));
-        this.sounds.get(character).play();
+        playSound(character);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class defaultPracticeMode extends MyGdxGame {
         centralButton.addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
                 if(timesCorrect < 5) {
-                    sounds.get(character).play();
+                    playSound(character);
                 } else {
                     viewDialog(getTexRegionDrawable(Main.language+"/"+locat+"/"+character + ".png"));
                 }
@@ -78,7 +78,7 @@ public class defaultPracticeMode extends MyGdxGame {
                 if(timesCorrect < 5) {
                     viewDialog(getTexRegionDrawable(Main.language+"/"+locat+"/"+choices[i] + ".png"));
                 } else {
-                    sounds.get(choices[i]).play();
+                    playSound(choices[i]);
                 }
                 return true;
             }
@@ -89,7 +89,7 @@ public class defaultPracticeMode extends MyGdxGame {
     protected void change() {
         randomize();
         for(int i = 0; i < textButtons.length; i++) {
-           // textButtons[i].setText(choices[i]);
+            // textButtons[i].setText(choices[i]);
         }
         if(timesCorrect < 5) {
             for(int i = 0; i < imageButtons.length; i++) {

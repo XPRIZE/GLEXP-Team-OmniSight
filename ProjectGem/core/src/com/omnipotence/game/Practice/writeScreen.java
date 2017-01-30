@@ -31,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.omnipotence.game.LevelScreen;
@@ -44,96 +45,98 @@ import java.util.ArrayList;
 public class writeScreen extends defaultScreen {
 
     private ImageButton clearButton, checkButton;
-	private SpriteBatch batch;
+    private SpriteBatch batch;
     private Stage stage, stage2;
     private Skin skin, skin2;
     private Table mainContainer;
-	private OrthographicCamera camera;
-	private Viewport viewport;
-	private Main main;
+    private OrthographicCamera camera;
+    private Viewport viewport;
+    private Main main;
     private double score;
-	private String vertexShader, fragmentShader, directory;
-	private ShaderProgram shader;
-	private DrawablePixmap drawable;
-	private int drawableRegionWidth, drawableRegionHeight, w, h;
+    private String vertexShader, fragmentShader, directory;
+    private ShaderProgram shader;
+    private DrawablePixmap drawable;
+    private int drawableRegionWidth, drawableRegionHeight, w, h;
     private ArrayList<Texture> instructions = new ArrayList<Texture>();
+    private Texture whiteBoxTexture;
 
     public writeScreen(Main main, double score, Stage stage2, Skin skin, Skin skin2, String d){
-		this.main = main;
+        this.main = main;
         this.score = (score < 0) ? 0 : score;
         this.stage2 = stage2;
         this.skin = skin;
         this.skin2 = skin2;
         this.directory = d;
+        this.whiteBoxTexture = new Texture(Gdx.files.internal("whiteBox.png"));
         create();
-	}
+    }
 
-	private void createForDrawing() {
+    private void createForDrawing() {
         /* I like to keep my shader programs as text files in the assets
 		 * directory rather than dealing with horrid Java string format	ting. */
-		drawableRegionHeight = h/5;
-		drawableRegionWidth = w;
-		drawable = new DrawablePixmap(new Pixmap(drawableRegionWidth,
-				drawableRegionHeight, Pixmap.Format.Alpha), 1);
+        drawableRegionHeight = h/5;
+        drawableRegionWidth = w;
+        drawable = new DrawablePixmap(new Pixmap(drawableRegionWidth,
+                drawableRegionHeight, Pixmap.Format.Alpha), 1);
 
-		vertexShader = "uniform mat4 u_projTrans;\n" +
-				"\n" +
-				"attribute vec4 a_position;\n" +
-				"attribute vec4 a_color;\n" +
-				"attribute vec2 a_texCoord0;\n" +
-				"\n" +
-				"varying vec4 v_color;\n" +
-				"varying vec2 v_texCoord0;\n" +
-				"\n" +
-				"void main()\n" +
-				"{\n" +
-				"    v_color = a_color;\n" +
-				"    v_texCoord0 = a_texCoord0;\n" +
-				"    gl_Position = u_projTrans * a_position;\n" +
-				"}\n";
-		fragmentShader = "#ifdef GL_ES\n" +
-				"    precision mediump float;\n" +
-				"#endif\n" +
-				"\n" +
-				"uniform sampler2D u_texture;\n" +
-				"uniform sampler2D u_mask;\n" +
-				"\n" +
-				"varying vec4 v_color;\n" +
-				"varying vec2 v_texCoord0;\n" +
-				"\n" +
-				"void main()\n" +
-				"{\n" +
-				"    vec4 texColor = texture2D(u_texture, v_texCoord0);\n" +
-				"    vec4 mask = texture2D(u_mask, v_texCoord0);\n" +
-				"    texColor.a *= mask.a;\n" +
-				"    gl_FragColor = v_color * texColor;\n" +
-				"}";
+        vertexShader = "uniform mat4 u_projTrans;\n" +
+                "\n" +
+                "attribute vec4 a_position;\n" +
+                "attribute vec4 a_color;\n" +
+                "attribute vec2 a_texCoord0;\n" +
+                "\n" +
+                "varying vec4 v_color;\n" +
+                "varying vec2 v_texCoord0;\n" +
+                "\n" +
+                "void main()\n" +
+                "{\n" +
+                "    v_color = a_color;\n" +
+                "    v_texCoord0 = a_texCoord0;\n" +
+                "    gl_Position = u_projTrans * a_position;\n" +
+                "}\n";
+        fragmentShader = "#ifdef GL_ES\n" +
+                "    precision mediump float;\n" +
+                "#endif\n" +
+                "\n" +
+                "uniform sampler2D u_texture;\n" +
+                "uniform sampler2D u_mask;\n" +
+                "\n" +
+                "varying vec4 v_color;\n" +
+                "varying vec2 v_texCoord0;\n" +
+                "\n" +
+                "void main()\n" +
+                "{\n" +
+                "    vec4 texColor = texture2D(u_texture, v_texCoord0);\n" +
+                "    vec4 mask = texture2D(u_mask, v_texCoord0);\n" +
+                "    texColor.a *= mask.a;\n" +
+                "    gl_FragColor = v_color * texColor;\n" +
+                "}";
 
 		/* Bonus: you can set `pedantic = false` while tinkering with your
 		 * shaders. This will stop it from crashing if you have unused variables
 		 * and so on. */
-		ShaderProgram.pedantic = false;
+        ShaderProgram.pedantic = false;
 
 		/* Construct our shader program. Spit out a log and quit if the shaders
 		 * fail to compile. */
-		shader = new ShaderProgram(vertexShader, fragmentShader);
-		if (!shader.isCompiled()) {
-			System.out.println("NOT COMPILING FUCK");
-			Gdx.app.log("Shader", shader.getLog());
-			Gdx.app.exit();
-		}
+        shader = new ShaderProgram(vertexShader, fragmentShader);
+        if (!shader.isCompiled()) {
+            System.out.println("NOT COMPILING FUCK");
+            Gdx.app.log("Shader", shader.getLog());
+            Gdx.app.exit();
+        }
 
 		/* Tell our shader that u_texture will be in the TEXTURE0 spot and
 		 * u_mask will be in the TEXTURE1 spot. We can set these now since
 		 * they'll never change; we don't have to send them every render frame. */
-		shader.begin();
-		shader.setUniformi("u_texture", 0);
-		shader.setUniformi("u_mask", 1);
-		shader.end();
-	}
+        shader.begin();
+        shader.setUniformi("u_texture", 0);
+        shader.setUniformi("u_mask", 1);
+        shader.end();
+    }
 
-	public void create() {
-		batch = new SpriteBatch();
+    public void create() {
+        batch = new SpriteBatch();
         stage = new Stage();
 
         w = Gdx.graphics.getWidth();
@@ -146,22 +149,25 @@ public class writeScreen extends defaultScreen {
         initMainContainer();
         createForDrawing();
         createButtons();
-        System.out.println("Checking the textures.");
+        System.out.println("Checking the textures. ");
+        if(directory != null && directory.contains("choice")) {
+            directory = directory.replace("choice", "");
+        }
         if(directory != null && Gdx.files.internal("Writing/"+directory).exists()) {
             createWriteInstructions();
         }
 
-		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(stage);
-		inputMultiplexer.addProcessor(new DrawingInput());
-		Gdx.input.setInputProcessor(inputMultiplexer);
+        inputMultiplexer.addProcessor(new DrawingInput());
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         stage.addActor(mainContainer);
         stage.addActor(clearButton);
         stage.addActor(checkButton);
-	}
+    }
 
     private void initMainContainer() {
         mainContainer = new Table();
@@ -216,15 +222,15 @@ public class writeScreen extends defaultScreen {
         }
     }
 
-	@Override
-	public void dispose(){
-		batch.dispose();
-		drawable.dispose();
+    @Override
+    public void dispose(){
+        batch.dispose();
+        drawable.dispose();
         stage.dispose();
         stage2.dispose();
         skin.dispose();
         skin2.dispose();
-	}
+    }
 
     @Override
     public void render(float delta) {
@@ -236,21 +242,23 @@ public class writeScreen extends defaultScreen {
         batch.begin();
         drawable.drawTexture(batch);
         batch.setProjectionMatrix(camera.combined);
+        int half = 7;
         for(int i = 0; i < instructions.size(); i++) {
             //System.out.println("Drawing the textures.");
             Texture texture = instructions.get(i);
-            int half = ((int) Math.ceil(instructions.size()/2.0));
-            float x =  newWidth(.1f + (.15f * i), texture.getWidth());
-            float y = newHeight(.8f - (.2f * (i % half)), texture.getHeight());
+            float x =  newWidth(.1f + .15f * (i%half), texture.getWidth());
+            float y = newHeight(.8f - (.3f * (i/half)), texture.getHeight());
+            // batch.draw(whiteBoxTexture, x, y, 250f, 250f);
             batch.draw(texture, x, y, 250f, 250f);
+
         }
         batch.end();
         stage2.draw();
     }
 
     public void resize(int width, int height) {
-		viewport.update(width, height);
-	}
+        viewport.update(width, height);
+    }
 
     private void getSSIMScore() {
         float ssimNum = main.androidSIMM.getSSIM
@@ -337,9 +345,21 @@ public class writeScreen extends defaultScreen {
                 stage2.dispose();
                 main.levelManager.incrementLevel(score);
                 main.setScreen(new LevelScreen(main));
+                float delay = 2.75f; // seconds
+
+                Timer.schedule(new Timer.Task(){
+                    @Override
+                    public void run() {
+                        // Do your work
+                        stage2.dispose();
+                        //main.levelManager.incrementLevel(score);
+                        main.setScreen(new LevelScreen(main));
+                    }
+                }, delay);
             }
         });
         stage2.addActor(button2);
+
     }
 
     /**
@@ -461,7 +481,7 @@ public class writeScreen extends defaultScreen {
         public boolean touchDragged(int screenX, int screenY, int pointer) {
             if (leftDown) {
                 Vector2 curr = new Vector2(screenX, screenY - h/1.25f);
-                System.out.println(screenY);
+                System.out.println(screenX);
                 System.out.println(h-screenY);
                 drawable.drawLerped(last, curr);
                 last = curr;

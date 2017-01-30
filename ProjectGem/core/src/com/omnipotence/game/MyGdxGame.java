@@ -1,6 +1,7 @@
 package com.omnipotence.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -47,7 +48,7 @@ public abstract class MyGdxGame extends defaultScreen {
     public double numWrong = 0;
     public float[][] positions;
     public int limit = 0;
-    public HashMap<String, Sound> sounds;
+    public HashMap<String, Music> sounds;
     private ImageButton exitbutton;
     public float buttonXSize = 150f;
     public float buttonYSize = 150f;
@@ -67,13 +68,13 @@ public abstract class MyGdxGame extends defaultScreen {
         setPositions();
         this.arr.remove(character);
         randomize();
-        this.sounds = new HashMap<String, Sound>();
+        this.sounds = new HashMap<String, Music>();
         this.sounds.put(character, getSound(character));
         setSounds(arr);
         initMainContainer();
         create();
         createExtraAssets();
-       // this.sounds.get(character).play();
+        // this.sounds.get(character).play();
     }
 
     protected abstract void setPositions();
@@ -85,15 +86,15 @@ public abstract class MyGdxGame extends defaultScreen {
         }
     }
 
-    private Sound getSound(String s) {
+    private Music getSound(String s) {
         s = s.replace(".", "");
         System.out.println(Main.language+"/"+locat+"-Sound/"+s+".mp3");
         FileHandle handle = Gdx.files.internal(Main.language+"/"+locat+"-Sound/"+s+".mp3");
         if (!handle.exists()) {
-            return Gdx.audio.newSound(Gdx.files.internal("sounds/winner.wav"));
+            return Gdx.audio.newMusic(Gdx.files.internal("sounds/winner.wav"));
         }
         System.out.println("Check sound Name: " +s);
-        return Gdx.audio.newSound(handle);
+        return Gdx.audio.newMusic(handle);
     }
 
     private void initMainContainer() {
@@ -341,6 +342,20 @@ public abstract class MyGdxGame extends defaultScreen {
             timesIncorrect++;
             incorrectScore.setText(timesIncorrect+"");
         }
+    }
+
+    public void playSound(String s) {
+        main.musicManager.pauseMusic();
+        Music music =  sounds.get(s);
+        music.setLooping(false);
+        music.setVolume(1f);
+        music.play();
+        music.setOnCompletionListener(new Music.OnCompletionListener() {
+            @Override
+            public void onCompletion(Music music) {
+                main.musicManager.playMusic();
+            }
+        });
     }
 
     public void viewDialog(final Drawable drawable) {

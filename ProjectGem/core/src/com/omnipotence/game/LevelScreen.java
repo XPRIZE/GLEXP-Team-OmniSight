@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -38,18 +40,18 @@ import java.util.ArrayList;
  */
 public class LevelScreen extends defaultScreen {
 
-	/** Determines the amount of pages shown on the level screen. */
+    /** Determines the amount of pages shown on the level screen. */
 
-	private Main gameInstance;
+    private Main gameInstance;
 
-	private Skin skin;
-	private Stage stage;
+    private Skin skin;
+    private Stage stage;
     private Table levelContainer;
     private float time;
 
-	public LevelScreen(Main gameInstance) {
-		this.gameInstance = gameInstance;
-	}
+    public LevelScreen(Main gameInstance) {
+        this.gameInstance = gameInstance;
+    }
 
     public LevelScreen(Main gameInstance, boolean nextLevel) {
         this.gameInstance = gameInstance;
@@ -60,27 +62,32 @@ public class LevelScreen extends defaultScreen {
 
 
     @Override
-	public void show() {
-		stage = new Stage(new ScreenViewport());
-		initializeSkin();
+    public void show() {
+        stage = new Stage(new ScreenViewport());
+        initializeSkin();
 
-		// Allow this stage to accept input
-		Gdx.input.setInputProcessor(stage);
+        // Allow this stage to accept input
+        Gdx.input.setInputProcessor(stage);
 
-		// Master table that holds all level buttons and logos
+        // Master table that holds all level buttons and logos
         Table container = new Table();
-		stage.addActor(container);
-		container.setFillParent(true);
+        stage.addActor(container);
+        container.setFillParent(true);
 
-		initLevelContainer();
+        initLevelContainer();
 
-		constructLevelPackPages();
+        constructLevelPackPages();
 
-		// Add the levels to a scroll pane
-		ScrollPane scroll = new ScrollPane(levelContainer, skin);
-		scroll.setFadeScrollBars(false); // Make scroll bars always show
-		container.add(scroll).expand().fill().row();
-	}
+        for(Cell cell : levelContainer.getCells()) {
+            cell.width(2560f);
+            cell.height(1665f);
+        }
+
+        // Add the levels to a scroll pane
+        ScrollPane scroll = new ScrollPane(levelContainer, skin);
+        scroll.setFadeScrollBars(false); // Make scroll bars always show
+        container.add(scroll).expand().fill().row();
+    }
 
     private void showDirectories() {
         FileHandle dirHandle;
@@ -98,38 +105,38 @@ public class LevelScreen extends defaultScreen {
         }
     }
 
-	/**
-	 * Initialize the level container with a background. The level container is
-	 * the table which holds each level pack's levels and is added to the Scroll
-	 * pane.
-	 */
-	private void initLevelContainer() {
-		levelContainer = new Table();
-		//levelContainer.setBackground(AssetManager.getInstance()
-		//		.convertTextureToDrawable("background1"));
-	}
+    /**
+     * Initialize the level container with a background. The level container is
+     * the table which holds each level pack's levels and is added to the Scroll
+     * pane.
+     */
+    private void initLevelContainer() {
+        levelContainer = new Table();
+        //levelContainer.setBackground(AssetManager.getInstance()
+        //		.convertTextureToDrawable("background1"));
+    }
 
-	/**
-	 * Creates the screens for each level pack and adds them to the level
-	 * container.
-	 */
-	private void constructLevelPackPages() {
+    /**
+     * Creates the screens for each level pack and adds them to the level
+     * container.
+     */
+    private void constructLevelPackPages() {
         int size;
         int totalSize = 0;
-		for (int page = 0; page < gameInstance.gameStages.size(); page++) {
+        for (int page = 0; page < gameInstance.gameStages.size(); page++) {
             size = gameInstance.gameStages.get(page).getLevelNameSize();
             System.out.println("Page: "+page+" Size:"+size);
             constructLevelPackPage(page, totalSize);
             totalSize += size;
-		}
+        }
         System.out.println("Total Size: "+totalSize);
-	}
+    }
 
-	/**
-	 * Creates a screen for each stage.
-	 */
-	private void constructLevelPackPage(int page, int size) {
-		int currentLevelID = 0;
+    /**
+     * Creates a screen for each stage.
+     */
+    private void constructLevelPackPage(int page, int size) {
+        int currentLevelID = 0;
 
         currentLevelID += size;
         int columns = (int)Math.sqrt(gameInstance.gameStages.get(page).getLevelNameSize());
@@ -138,41 +145,46 @@ public class LevelScreen extends defaultScreen {
         }
         int rows = (int)Math.ceil(gameInstance.gameStages.get(page).getLevelNameSize()/ (float)columns);
 
-		Table levels = new Table();
-		// Sets default padding to 20px top/bottom, 40px left/right
-    //    if(gameInstance.language.equals("Swahili") && page == 2) {
-    //        levels.defaults().pad(10, 40, 10, 40);
-    //    } else {
-            levels.defaults().pad(0, 40, 0, 40);
-     //   }
+        Table levels = new Table();
+        // Sets default padding to 20px top/bottom, 40px left/right
+        //    if(gameInstance.language.equals("Swahili") && page == 2) {
+        //        levels.defaults().pad(10, 40, 10, 40);
+        //    } else {
+        levels.defaults().pad(0, 40, 0, 40);
+        //   }
         Label label = new Label(gameInstance.gameStages.get(page).getStageName(), skin, "largeLabel");
         label.setAlignment(Align.center);
-		levels.add(label).colspan(columns).row(); // Logo spans 3 columns
+        label.setFontScale(1.5f);
+        levels.add(label).colspan(columns).row(); // Logo spans 3 columns
         if(page % 2 == 0) {
             levels.setBackground(AssetManager.getInstance().convertTextureToDrawable("background1"));
         } else {
             levels.setBackground(AssetManager.getInstance().convertTextureToDrawable("background4"));
         }
         int index = 0;
-		for (int y = 0; y < rows; y++) {
-			levels.row();
-			for (int x = 0; x < columns && index < gameInstance.gameStages.get(page).getLevelNameSize(); x++) {
+        for (int y = 0; y < rows; y++) {
+            levels.row();
+            for (int x = 0; x < columns && index < gameInstance.gameStages.get(page).getLevelNameSize(); x++) {
                 currentLevelID++;
-				levels.add(setLevelButton(page, index, currentLevelID)).expand().fill();
+                levels.add(setLevelButton(page, index, currentLevelID)).expand().fill();
                 System.out.println("Page: "+page+" index: "+index+" currentID: "+currentLevelID);
                 index++;
-			}
-		}
+            }
+        }
         levels.row();
         Table score = new Table();
         int userScore = gameInstance.gameStages.get(page).getStageScore(
                 (size+1), gameInstance.levelManager, columns);
         for(int i = 0; i < columns; i++) {
             if(userScore > 0) {
-                score.add(new Image(new TextureRegion(new Texture(Gdx.files.internal("Chest_Gem.png")))));
+                Image image = new Image(new TextureRegion(new Texture(Gdx.files.internal("Chest_Gem.png"))));
+                image.setScale(1.2f);
+                score.add(image).pad(0f, 60f, 0f, 60f);
                 userScore--;
             } else {
-                score.add(new Image(new TextureRegion(new Texture(Gdx.files.internal("Chest_Close.png")))));
+                Image image = new Image(new TextureRegion(new Texture(Gdx.files.internal("Chest_Close.png"))));
+                image.setScale(1.2f);
+                score.add(image).pad(0f, 60f, 0f, 60f);
             }
         }
         levels.add(score).colspan(columns).row();
@@ -183,17 +195,17 @@ public class LevelScreen extends defaultScreen {
         } else {
             levelContainer.add(levels).colspan(1);
         }
-	}
+    }
 
-	/**
-	 * Creates a button to represent the level.
-	 */
-	private Button setLevelButton(int page, int level, int levelKey) {
-		Button button = new Button(skin);
-		ButtonStyle style = button.getStyle();
-		style.up = style.down = null;
+    /**
+     * Creates a button to represent the level.
+     */
+    private Button setLevelButton(int page, int level, int levelKey) {
+        Button button = new Button(skin);
+        ButtonStyle style = button.getStyle();
+        style.up = style.down = null;
 
-		// Create the label to show the level name
+        // Create the label to show the level name
         String levelName = "";
         //Breaks down the levelName by maxChars allowable per Button Width
         int maxChars = 25;
@@ -208,17 +220,18 @@ public class LevelScreen extends defaultScreen {
             levelName += s;
         }
         Boolean isBattle = levelName.contains("BATTLE");
-		Label label = new Label((isBattle) ? "BATTLE" : levelName, skin, "default");
-		label.setAlignment(Align.center);
+        Label label = new Label((isBattle) ? "BATTLE" : levelName, skin, "default");
+        label.setFontScale(1.25f);
+        label.setAlignment(Align.center);
 
-		// Get the LevelData for the level
-		LevelData data = null;
-		if (gameInstance.levelManager.isLevel(levelKey)) {
-			data = gameInstance.levelManager.getLevel(levelKey).levelData;
-		}
+        // Get the LevelData for the level
+        LevelData data = null;
+        if (gameInstance.levelManager.isLevel(levelKey)) {
+            data = gameInstance.levelManager.getLevel(levelKey).levelData;
+        }
 
-		// False if data is not found (i.e. level hasn't been played yet)
-		boolean unlocked = data != null && data.isUnlocked();
+        // False if data is not found (i.e. level hasn't been played yet)
+        boolean unlocked = data != null && data.isUnlocked();
         Image buttonImage;
         if(unlocked) {
             buttonImage = new Image(skin.getDrawable("top"));
@@ -227,26 +240,26 @@ public class LevelScreen extends defaultScreen {
         } else {
             buttonImage = new Image(skin.getDrawable("locked-level"));
         }
-        button.stack(buttonImage, label).width(gameInstance.gameStages.get(page).getButtonWidth())
-                .height(gameInstance.gameStages.get(page).getButtonHeight()).expand().fill();
+        button.stack(buttonImage, label).width(gameInstance.gameStages.get(page).getButtonWidth() * 1.3f)
+                .height(gameInstance.gameStages.get(page).getButtonHeight() * 1.3f).expand().fill();
 
-		button.setName(Integer.toString(level));
+        button.setName(Integer.toString(level));
         addClickListener(button, page, level, levelKey);
-		return button;
-	}
+        return button;
+    }
 
-	/**
-	 * Initialize the skin. The skin is a LibGDX API that tells UI widgets how to look.
-	 */
-	private void initializeSkin() {
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"), new TextureAtlas(
-				"skin/uiskin.atlas"));
-		// Set the unlocked level buttons to be green.
-		skin.add("top", skin.newDrawable("default-round", Color.valueOf("#70ff7c")),
-				Drawable.class);
-		// Set the locked level buttons to be blue.
-		skin.add("locked-level", skin.newDrawable("default-round", new Color(0f, 151f, 167f, .9f)),
-				Drawable.class);
+    /**
+     * Initialize the skin. The skin is a LibGDX API that tells UI widgets how to look.
+     */
+    private void initializeSkin() {
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"), new TextureAtlas(
+                "skin/uiskin.atlas"));
+        // Set the unlocked level buttons to be green.
+        skin.add("top", skin.newDrawable("default-round", Color.valueOf("#70ff7c")),
+                Drawable.class);
+        // Set the locked level buttons to be blue.
+        skin.add("locked-level", skin.newDrawable("default-round", new Color(0f, 151f, 167f, .9f)),
+                Drawable.class);
         // Set the battle level buttons to be red.
         skin.add("battle", skin.newDrawable("default-round", Color.valueOf("#ff7070")),
                 Drawable.class);
@@ -263,12 +276,12 @@ public class LevelScreen extends defaultScreen {
         largeLabelStyle.font = skin.getFont("largeFont");
         largeLabelStyle.fontColor = Color.valueOf("#ff7070");
         skin.add("largeLabel", largeLabelStyle);
-	}
+    }
 
-	/**
-	 * Handle a button click/tap by going to the level that was tapped.
-	 */
-   private void addClickListener(Button button, final int page, final int level, final int levelKey) {
+    /**
+     * Handle a button click/tap by going to the level that was tapped.
+     */
+    private void addClickListener(Button button, final int page, final int level, final int levelKey) {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -280,61 +293,61 @@ public class LevelScreen extends defaultScreen {
                     if(levelName.equals("BATTLE")) {
                         activateBattleMode(page, levelKey-1, level-1);
                     } else {
-                       if(levelKey == 1) {
-                           gameInstance.levelManager.setCurrentLevel(gameInstance.levelManager.
-                                   getLevel(levelKey), levelKey);
-                           gameInstance.setScreen(new newScreen(gameInstance));
+                        if(levelKey == 1) {
+                            gameInstance.levelManager.setCurrentLevel(gameInstance.levelManager.
+                                    getLevel(levelKey), levelKey);
+                            gameInstance.setScreen(new newScreen(gameInstance));
                         } else {
-                           gameInstance.levelManager.setCurrentLevel(gameInstance.levelManager.
-                                   getLevel(levelKey), levelKey);
-                           for (int i = 0; i < gameInstance.gameStages.get(page).getLevelNameSize(); i++) {
-                               String s = gameInstance.gameStages.get(page).getLevelName(i);
-                               if (!s.equals("BATTLE")) {
-                                   arr.add(s);
-                               }
-                           }
-                           int index = levelName.indexOf("-") + levelName.indexOf("+")
-                                   + levelName.indexOf("*") + 2;
-                           if (index > -1 && levelName.substring(levelName.length() - 1)
-                                   .matches("[0-9]+")) {
-                               activateMathPracticeMode(page, levelName, index);
-                           } else if (levelName.contains("?")) {
-                               arr.removeAll(arr);
-                               for (String o : gameInstance.answerKeyForTheQuestions.values()) {
-                                   arr.add(o);
-                               }
-                               gameInstance.setScreen(new questionMode(gameInstance,
-                                       gameInstance.gameStages.get(page).getStageName(),
-                                       gameInstance.gameStages.get(page).getLevelName(level),
-                                       gameInstance.answerKeyForTheQuestions.get(gameInstance.
-                                               gameStages.get(page).getLevelName(level)), arr));
-                           } else if (gameInstance.gameStages.get(page).getStageName().equals("Tools")) {
-                               gameInstance.setScreen(new toolsMode(gameInstance,
-                                       gameInstance.gameStages.get(page).getStageName(),
-                                       levelName, arr));
-                           } else if (gameInstance.gameStages.get(page).getStageName().equals("Graphemes")
-                                   && gameInstance.language == "English") {
-                               gameInstance.setScreen(new graphemesMode(gameInstance,
-                                       gameInstance.gameStages.get(page).getStageName(),
-                                       levelName, arr));
-                           } else if (gameInstance.gameStages.get(page).getStageName().equals("Rime Family") ||
-                                   gameInstance.gameStages.get(page).getStageName().equals("Noun Classes")) {
-                               gameInstance.setScreen(new rimeFamilyMode(gameInstance,
-                                       gameInstance.gameStages.get(page).getStageName(),
-                                       levelName, arr));
+                            gameInstance.levelManager.setCurrentLevel(gameInstance.levelManager.
+                                    getLevel(levelKey), levelKey);
+                            for (int i = 0; i < gameInstance.gameStages.get(page).getLevelNameSize(); i++) {
+                                String s = gameInstance.gameStages.get(page).getLevelName(i);
+                                if (!s.equals("BATTLE")) {
+                                    arr.add(s);
+                                }
+                            }
+                            int index = levelName.indexOf("-") + levelName.indexOf("+")
+                                    + levelName.indexOf("*") + 2;
+                            if (index > -1 && levelName.substring(levelName.length() - 1)
+                                    .matches("[0-9]+")) {
+                                activateMathPracticeMode(page, levelName, index);
+                            } else if (levelName.contains("?")) {
+                                arr.removeAll(arr);
+                                for (String o : gameInstance.answerKeyForTheQuestions.values()) {
+                                    arr.add(o);
+                                }
+                                gameInstance.setScreen(new questionMode(gameInstance,
+                                        gameInstance.gameStages.get(page).getStageName(),
+                                        gameInstance.gameStages.get(page).getLevelName(level),
+                                        gameInstance.answerKeyForTheQuestions.get(gameInstance.
+                                                gameStages.get(page).getLevelName(level)), arr));
+                            } else if (gameInstance.gameStages.get(page).getStageName().equals("Tools")) {
+                                gameInstance.setScreen(new toolsMode(gameInstance,
+                                        gameInstance.gameStages.get(page).getStageName(),
+                                        levelName, arr));
+                            } else if (gameInstance.gameStages.get(page).getStageName().equals("Graphemes")
+                                    && gameInstance.language == "English") {
+                                gameInstance.setScreen(new graphemesMode(gameInstance,
+                                        gameInstance.gameStages.get(page).getStageName(),
+                                        levelName, arr));
+                            } else if (gameInstance.gameStages.get(page).getStageName().equals("Rime Family") ||
+                                    gameInstance.gameStages.get(page).getStageName().equals("Noun Classes")) {
+                                gameInstance.setScreen(new rimeFamilyMode(gameInstance,
+                                        gameInstance.gameStages.get(page).getStageName(),
+                                        levelName, arr));
 
-                           } else if (!(Gdx.files.internal(Main.language + "/" + gameInstance.
-                                   gameStages.get(page).getStageName() + "/" + gameInstance.gameStages.
-                                   get(page).getLevelName(level) + ".png").exists())) {
-                               gameInstance.setScreen(new noTexturePracticeMode(gameInstance,
-                                       gameInstance.gameStages.get(page).getStageName(),
-                                       levelName, arr));
-                           } else {
-                               gameInstance.setScreen(new defaultPracticeMode(gameInstance,
-                                       gameInstance.gameStages.get(page).getStageName(),
-                                       levelName, arr));
-                           }
-                       }
+                            } else if (!(Gdx.files.internal(Main.language + "/" + gameInstance.
+                                    gameStages.get(page).getStageName() + "/" + gameInstance.gameStages.
+                                    get(page).getLevelName(level) + ".png").exists())) {
+                                gameInstance.setScreen(new noTexturePracticeMode(gameInstance,
+                                        gameInstance.gameStages.get(page).getStageName(),
+                                        levelName, arr));
+                            } else {
+                                gameInstance.setScreen(new defaultPracticeMode(gameInstance,
+                                        gameInstance.gameStages.get(page).getStageName(),
+                                        levelName, arr));
+                            }
+                        }
                     }
                 }
             }
@@ -379,9 +392,9 @@ public class LevelScreen extends defaultScreen {
     private void activateMathPracticeMode(int page, String levelName, int index) {
         ArrayList<String> arr = new ArrayList<String>();
         int firstNum = Integer.parseInt(levelName.substring(0, index)
-                    .replaceAll(" ", ""));
+                .replaceAll(" ", ""));
         int secondNum = Integer.parseInt(levelName.substring(index+1)
-                    .replaceAll(" ", ""));
+                .replaceAll(" ", ""));
         int answer;
         switch (levelName.charAt(index)) {
             case '-': answer = firstNum-secondNum; break;
@@ -397,7 +410,7 @@ public class LevelScreen extends defaultScreen {
                 gameInstance.gameStages.get(page).getStageName(), answer, arr, firstNum, secondNum, levelName));
     }
 
-	//SCREEN CLASSES
+    //SCREEN CLASSES
     @Override
     public void render(float delta) {
         // Update and render the stage

@@ -29,7 +29,7 @@ public class Main extends Game {
 	 * */
     private String[] languages = {"English", "Swahili"};
 	public static final int langIndex = 0;
-	public static final String language = "Swahili";
+	public static final String language = "English";
     public Game games = this;
 	public LevelManager levelManager;
 	public MusicManager musicManager;

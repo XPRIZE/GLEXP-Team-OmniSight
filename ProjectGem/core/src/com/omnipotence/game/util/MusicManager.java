@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 
 /**
  * Manages the background music in the game.
- * 
+ *
  * @author Faizaan Datoo
  */
 public class MusicManager {
@@ -44,6 +44,18 @@ public class MusicManager {
 	public void dispose() {
 		currentMusic.stop();
 		musics.clear();
+	}
+
+	public void pauseMusic() {
+		currentMusic.pause();
+	}
+
+	public void playMusic() {
+		currentMusic.play();
+	}
+
+	public void setNewVolume(float v) {
+		currentMusic.setVolume(v);
 	}
 
 	/**
